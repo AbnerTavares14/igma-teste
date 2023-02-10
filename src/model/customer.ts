@@ -21,18 +21,9 @@ export default class Customer {
         return this.birthdate;
     }
 
-    public verifyCpf(): boolean {
-        if (this.cpf.includes(".") && this.cpf.length === 14) {
-            const cpfWithoutVerificationDigits = this.cpf.split("-");
-            const arrCpf = cpfWithoutVerificationDigits[0].split(".");
-            let cpfWithoutPoints = arrCpf.join("");
-            let cpf = cpfWithoutPoints + cpfWithoutVerificationDigits[1]
+    public cpfIsValid(): boolean {
 
-            let cpfWithTenDigits = this.treatTheCpf(cpfWithoutPoints);
-            let cpfWithElevenDigits = this.treatTheCpf(cpfWithTenDigits);
-
-            return cpfWithElevenDigits === cpf;
-        } else if (this.cpf.length === 11) {
+        if (this.cpf.length === 11) {
             let cpfWhithouVerificationDigits = "";
 
             for (let i = 0; i < 9; i++) {
@@ -44,16 +35,18 @@ export default class Customer {
 
             return cpfWithElevenDigits === this.cpf;
 
+        } else {
+            return false;
         }
     }
 
     public treatTheCpf(cpf: string) {
         let total = 0;
-        let j = cpf.length + 1;
+        let multiplier = cpf.length + 1;
 
-        for (let i of cpf) {
-            total += +i * j;
-            j--;
+        for (let digit of cpf) {
+            total += +digit * multiplier;
+            multiplier--;
         }
 
         let rest = total % 11;

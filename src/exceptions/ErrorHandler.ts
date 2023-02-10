@@ -6,6 +6,7 @@ export enum HttpCode {
     BAD_REQUEST = 400,
     UNAUTHORIZED = 401,
     NOT_FOUND = 404,
+    CONFLICT = 409,
     UNPROCESSABLE_ENTITY = 422
 }
 
@@ -34,5 +35,12 @@ export class UnprocessableEntityError extends HandleError {
 export class NotFoundError extends HandleError {
     constructor(message: string) {
         super(message, HttpCode.NOT_FOUND);
+    }
+}
+
+
+export class ConflictError extends HandleError {
+    constructor(message: string) {
+        super(message, HttpCode.CONFLICT);
     }
 }

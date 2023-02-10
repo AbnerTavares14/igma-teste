@@ -1,12 +1,14 @@
 import { Request, Response } from "express";
-import Customer from "../model/customer.js";
 import { UnprocessableEntityError } from "../exceptions/ErrorHandler.js";
+import CustomerService from "../services/customerService.js";
 
 
 class CustomerController {
     public async getCustomers(req: Request, res: Response): Promise<Response> {
-        const customer = new Customer("Abner", "100.444.777-05", new Date(2000, 14, 1));
-        return res.send(customer).status(200);
+        const { limit = '10', page = '0' } = req.query;
+        const skip = +page * +limit;
+        const customers = await CustomerService.findAll(+limit, +skip);
+        return res.send(customers).status(200);
     }
 
     public async createCustomer(req: Request, res: Response): Promise<Response> {
@@ -16,14 +18,23 @@ class CustomerController {
             throw new UnprocessableEntityError("Name, cpf and birthdate is required!");
         }
 
-        const birthDateFormated = birthdate.split('/');
-        const customer = new Customer(name, cpf, new Date(birthDateFormated[0], birthDateFormated[1], birthDateFormated[2]));
-
-        if (!customer.verifyCpf()) {
-            throw new UnprocessableEntityError("Invalid cpf");
-        }
+        await CustomerService.create(name, cpf, birthdate);
 
         return res.sendStatus(200);
+    }
+
+    public async getCustomer(req: Request, res: Response): Promise<Response> {
+        const { cpf } = req.params;
+
+        const customer = await CustomerService.getCustomerByCpf(cpf);
+
+        return res.status(200).send(customer);
+    }
+
+    public async deleteCustomer(req: Request, res: Response): Promise<Response> {
+        const { cpf } = req.params;
+        await CustomerService.deleteByCpf(cpf);
+        return res.sendStatus(204);
     }
 }
 
