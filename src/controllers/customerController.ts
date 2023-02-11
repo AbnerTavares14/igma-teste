@@ -20,7 +20,7 @@ class CustomerController {
 
         await CustomerService.create(name, cpf, birthdate);
 
-        return res.sendStatus(200);
+        return res.sendStatus(201);
     }
 
     public async getCustomer(req: Request, res: Response): Promise<Response> {

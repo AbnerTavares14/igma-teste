@@ -18,7 +18,6 @@ export interface UpdateCustomer {
 class CustomerService {
 
     public async create(name: string, cpf: string, birthdate: string) {
-        const birthDateFormated = birthdate.split('/');
         let cpfFormatted = this.formatCpf(cpf);
         const existCustomer = await CustomerRepository.findByCpf(cpfFormatted);
 
@@ -27,7 +26,7 @@ class CustomerService {
             throw new ConflictError("O CPF já está cadastrado!");
         }
 
-        const customer = new Customer(name, cpfFormatted, new Date(+birthDateFormated[0], +birthDateFormated[1] - 1, +birthDateFormated[2]));
+        const customer = new Customer(name, cpfFormatted, new Date(birthdate));
 
         if (!customer.cpfIsValid()) {
             throw new UnprocessableEntityError("CPF inválido!");
@@ -73,16 +72,9 @@ class CustomerService {
 
         const cpfFormatted = cpf ? this.formatCpf(cpf) : customer.cpf;
         const cpfAlreadyRegister = cpf ? await CustomerRepository.findByCpf(cpfFormatted) : false;
-        const birthDateFormated = birthdate ? birthdate.split('/') : customer.birthdate;
+        const birthDateFormated = birthdate ? new Date(birthdate) : customer.birthdate;
         const dataCustomer = { name: name ? name : customer.name, cpf: cpfFormatted, birthdate: birthDateFormated };
-        let customerObj: Customer;
-
-        if (dataCustomer.birthdate[0]) {
-            customerObj = new Customer(dataCustomer.name, dataCustomer.cpf, new Date(+dataCustomer.birthdate[0], +dataCustomer.birthdate[1] - 1, +dataCustomer.birthdate[2]));
-        } else {
-            customerObj = new Customer(dataCustomer.name, dataCustomer.cpf, dataCustomer.birthdate as Date);
-        }
-
+        let customerObj = new Customer(dataCustomer.name, dataCustomer.cpf, dataCustomer.birthdate);
 
         if (cpfAlreadyRegister) {
             throw new ConflictError("CPF já está cadastrado!");
