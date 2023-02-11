@@ -24,7 +24,7 @@
 Primeiro faça o clone do projeto:
 
 ```bash
-$ git clone https://github.com/AbnerTavares14/igma-teste
+$ git clone https://github.com/AbnerTavares14/igma-teste.git
 ```
 
 Instale as dependência: 
