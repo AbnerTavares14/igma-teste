@@ -15,6 +15,8 @@
 
 [express-async-errors](https://www.npmjs.com/package/express-async-errors)
 
+[swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express)
+
 [Dotenvi](https://www.npmjs.com/package/dotenv)
 
 ## Como subir o projeto:
