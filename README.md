@@ -19,6 +19,10 @@
 
 [Dotenvi](https://www.npmjs.com/package/dotenv)
 
+[Pino](https://www.npmjs.com/package/pino)
+
+[pino-http](https://www.npmjs.com/package/pino-http)
+
 ## Como subir o projeto:
 
 Primeiro faça o clone do projeto:
