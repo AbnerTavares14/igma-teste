@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UnprocessableEntityError } from "../exceptions/ErrorHandler.js";
+import { BadRequestError, UnprocessableEntityError } from "../exceptions/ErrorHandler.js";
 import CustomerService from "../services/customerService.js";
 
 
@@ -29,6 +29,19 @@ class CustomerController {
         const customer = await CustomerService.getCustomerByCpf(cpf);
 
         return res.status(200).send(customer);
+    }
+
+    public async updateCustomer(req: Request, res: Response): Promise<Response> {
+        const { id } = req.params;
+        const { name, cpf, birthdate } = req.body;
+
+        if (!name && !cpf && !birthdate) {
+            throw new BadRequestError("É necessário enviar ao menos um dos seguintes campos: name, cpf ou birthdate");
+        }
+
+        await CustomerService.updateCustomerById(+id, name, cpf, birthdate);
+
+        return res.sendStatus(200);
     }
 
     public async deleteCustomer(req: Request, res: Response): Promise<Response> {

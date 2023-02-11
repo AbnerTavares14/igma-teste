@@ -1,5 +1,3 @@
-import { Response } from "express";
-
 export enum HttpCode {
     OK = 200,
     NO_CONTENT = 204,

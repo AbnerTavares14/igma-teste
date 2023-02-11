@@ -1,5 +1,5 @@
 import prisma from "../config/db.js";
-import { CreateCustomer } from "../services/customerService.js";
+import { CreateCustomer, UpdateCustomer } from "../services/customerService.js";
 
 
 
@@ -22,6 +22,23 @@ class CustomerRepository {
         return prisma.customer.findMany({
             take: limit,
             skip
+        });
+    }
+
+    async findById(id: number) {
+        return prisma.customer.findUnique({
+            where: {
+                id
+            }
+        });
+    }
+
+    async updateCustomer(data: UpdateCustomer, id: number) {
+        return prisma.customer.update({
+            where: {
+                id
+            },
+            data
         });
     }
 
